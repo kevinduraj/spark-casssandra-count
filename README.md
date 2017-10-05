@@ -2,7 +2,6 @@ Spark Cassandra Counter
 =======================
 
 ### Table Counter
-
 ```
 --------------------------------
 ./run.sh top vdomain 10000
@@ -14,3 +13,10 @@ Spark Cassandra Counter
 --------------------------------
 ./run.sh clear
 ```
+
+### Clean Cache
+```
+$ rm -fR ~/.m2/
+$ rm -fR ~/.ivy2/
+```
+

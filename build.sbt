@@ -1,4 +1,4 @@
-name := "spark-cassandra"
+name := "spark-cassandra-count"
 
 version := "1.0"
 
@@ -24,4 +24,4 @@ logLevel := Level.Error
 // but will still be included on the classpath when we do a sbt/run
 //run in Compile <<= Defaults.runTask(fullClasspath in Compile, mainClass in (Compile, run), runner in (Compile, run))
 
-assemblySettings
+// assemblySettings
