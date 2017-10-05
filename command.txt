@@ -1,0 +1,2 @@
+val df1 = csc.sql("SELECT distinct domain, count(domain) total FROM health GROUP BY domain ORDER BY total DESC LIMIT 50").toDF()
+
