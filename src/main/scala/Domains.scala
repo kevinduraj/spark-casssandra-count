@@ -8,7 +8,7 @@ case class domain(name: String, count: BigInt)
 case class Row(name: String, count: BigInt)
 
 /*---------------------------------------------------------------------------------------*/
-object TopDomains {
+object Domains {
 
     val locale = new java.util.Locale("us", "US")
     val formatter = java.text.NumberFormat.getIntegerInstance(locale)
@@ -56,9 +56,10 @@ object TopDomains {
 
 
         // Write to Cassandra
+        //  .mode("overwrite")
         df3.write
             .format("org.apache.spark.sql.cassandra")
-            .mode("overwrite")
+            .mode("append")
             .options(Map("table" -> "health", "keyspace" -> "cloud2"))
             .save()
 

@@ -1,7 +1,7 @@
 import org.apache.spark.{SparkContext, SparkConf}
 import com.datastax.spark.connector._
 
-object TotalLinks {
+object Links {
 
     val locale = new java.util.Locale("us", "US")
     val formatter = java.text.NumberFormat.getIntegerInstance(locale)
