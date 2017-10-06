@@ -19,7 +19,7 @@ object TopDomains {
       println("*********************************************")
       println(table_name + " " + size)
       println("*********************************************")
-      
+
       get_largest_visited_domains(table_name, size)
   }
 
@@ -32,10 +32,15 @@ object TopDomains {
         //val sc = new SparkContext("spark://69.13.39.46:7077", "cloud1", conf)
         val spark = new SparkContext(conf)
         
-        val df = spark.cassandraTable("cloud1", table_name)
-        val total = df.cassandraCount()
+        val table1 = spark.cassandraTable("cloud1", table_name)
+        val total = table1.cassandraCount()
         println("Total " +  table_name + " = " + total)
 
+        val table2 = table1.spanBy(row => (row.getInt("domain")))
+        val result1 = table2.count()
+        println(result1)
+
+        //val result = table1.select("domain").groupBy("domain")
         //val df2 = df.select("domain", "total").filter("total > " + size).orderBy("total")
         //df2.collect().foreach { row => println(row.get(0)  + " " + row.get(1) ) }
 
