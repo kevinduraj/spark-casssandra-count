@@ -39,6 +39,8 @@ object TopDomains {
         val table2 = table1.spanBy(row => (row.getString("domain")))
         table2.groupByKey.count
         table2.take(100).foreach(println)
+        println(table2.getClass)
+
 
 
         //val result1 = table2.count()
