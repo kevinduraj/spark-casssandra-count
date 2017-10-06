@@ -43,17 +43,17 @@ object TopDomains {
 
         val df1 = spark.read
             .cassandraFormat("vdomain", "cloud1", "Cassandra Cluster")
-            .load()
+            .load().cache()
 
         val df2 = df1.orderBy(col("total").desc)
         df2.show(50, false)
         println("Total vdomain = " + df2.count())
 
-        df2.createOrReplaceTempView("domains")
-        val df3 = spark.sql("SELECT * FROM domains WHERE total < 10")
+        df1.createOrReplaceTempView("table1")
+        val df3 = spark.sql("SELECT * FROM table1 WHERE total < 10")
         df3.show(50, false)
 
-        
+
         // Write to Cassandra
         //      employee1.write
         //          .format("org.apache.spark.sql.cassandra")
