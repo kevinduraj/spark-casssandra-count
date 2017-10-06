@@ -50,33 +50,18 @@ object TopDomains {
         df3.show(100, false)
 
 
-//        val df2 = df1.orderBy(col("total").desc)
-//        df2.show(50, false)
-//        println("Total vdomain = " + df2.count())
-
-
+        //  val df2 = df1.orderBy(col("total").desc)
+        //  df2.show(50, false)
+        //  println("Total vdomain = " + df2.count())
 
 
         // Write to Cassandra
-        //      employee1.write
-        //          .format("org.apache.spark.sql.cassandra")
-        //          .mode("overwrite")
-        //          .options(Map( "table" -> "employee_new", "keyspace" -> "test_keyspace"))
-        //          .save()
+        df3.write
+            .format("org.apache.spark.sql.cassandra")
+            .mode("overwrite")
+            .options(Map("table" -> "health", "keyspace" -> "cloud2"))
+            .save()
 
-
-        //val result = table1.select("domain").groupBy("domain")
-        //val df2 = df.select("domain", "total").filter("total > " + size).orderBy("total")
-        //df2.collect().foreach { row => println(row.get(0)  + " " + row.get(1) ) }
-
-        // df2.filter("count > 1000").collect().foreach(println)
-        // csc.setKeyspace("engine")
-        // df2.registerTempTable("table1")
-        // csc.sql("SELECT * FROM table1").show()
-
-        //println("--------------------------------------------------------------")
-        //df2.collect().foreach { row => println(row.get(0)  + " " + row.get(1) ) }
-        //println("--------------------------------------------------------------")
 
         spark.stop()
 
