@@ -45,13 +45,16 @@ object TopDomains {
             .cassandraFormat("vdomain", "cloud1", "Cassandra Cluster")
             .load().cache()
 
-        val df2 = df1.orderBy(col("total").desc)
-        df2.show(50, false)
-        println("Total vdomain = " + df2.count())
-
         df1.createOrReplaceTempView("table1")
-        val df3 = spark.sql("SELECT * FROM table1 WHERE total < 10")
-        df3.show(50, false)
+        val df3 = spark.sql("SELECT * FROM table1 WHERE domain like '%health%'")
+        df3.show(100, false)
+
+
+//        val df2 = df1.orderBy(col("total").desc)
+//        df2.show(50, false)
+//        println("Total vdomain = " + df2.count())
+
+
 
 
         // Write to Cassandra
