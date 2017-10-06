@@ -26,7 +26,7 @@ else
 
   echo "+---------------------------------------------"
   echo "| 0. Build Assembly                           "
-  echo "| 1. ./run1.sh 1 vdomain 750                  "
+  echo "| 1. ./run.sh 1 vdomain 750                   "
   echo "| 2. Total Links                              "
   echo "+---------------------------------------------"
   echo "| 4. Clear                                    "
