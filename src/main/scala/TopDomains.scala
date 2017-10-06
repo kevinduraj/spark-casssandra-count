@@ -1,8 +1,6 @@
-import com.datastax.spark.connector._
-import org.apache.spark.{SparkContext, SparkConf}
-import org.apache.spark.sql.SQLContext
-import com.datastax.spark.connector.cql.CassandraConnector
+import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.cassandra._
+import org.apache.spark.sql.functions._
 
 
 case class domain(name: String, count: BigInt)
@@ -37,25 +35,6 @@ object TopDomains {
       */
     def get_largest_visited_domains(table_name: String, size: Int): Unit = {
 
-        /*-------------------------------------------------------------------------------------*/
-        //        val conf = new SparkConf(true)
-        //                        .setAppName("TopDomains")
-        //                        .set("spark.cassandra.connection.host", "10.0.0.1")
-        //        //val sc = new SparkContext("spark://69.13.39.46:7077", "cloud1", conf)
-        //        val spark = new SparkContext(conf)
-        //
-        //        val table1 = spark.cassandraTable("cloud1", table_name)
-        //        val total = table1.cassandraCount()
-        //        println("Total " +  table_name + " = " + total)
-        //
-        //
-        //        val table2 = table1.spanBy(row => (row.getString("domain")))
-        //        table2.groupByKey.count
-        //        table2.take(100).foreach(println)
-        //        println(table2.getClass)
-        /*-------------------------------------------------------------------------------------*/
-        import org.apache.spark.sql.SparkSession
-
         val spark = SparkSession
             .builder()
             .appName("TopDomains")
@@ -66,20 +45,18 @@ object TopDomains {
             .cassandraFormat("vdomain", "cloud1", "Cassandra Cluster")
             .load()
 
-        val df2 = df1.orderBy(org.apache.spark.sql.functions.col("total").desc)
+        val df2 = df1.orderBy(col("total").desc)
         df2.show(100, false)
+        println("Total vdomain = " + df2.count())
 
-
+        // Write to Cassandra
         //      employee1.write
         //          .format("org.apache.spark.sql.cassandra")
         //          .mode("overwrite")
         //          .options(Map( "table" -> "employee_new", "keyspace" -> "test_keyspace"))
         //          .save()
 
-
-        //val result1 = table2.count()
-        //println(result1)
-
+        
         //val result = table1.select("domain").groupBy("domain")
         //val df2 = df.select("domain", "total").filter("total > " + size).orderBy("total")
         //df2.collect().foreach { row => println(row.get(0)  + " " + row.get(1) ) }
