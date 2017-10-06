@@ -12,11 +12,15 @@ object TopDomains {
   
   /*-------------------------------------------------------------------------------------*/  
   def main(args: Array[String]) {
-    val table_name = if(args(0).length == 0) "vdomain" else args(0)
-    val size = if(args(1).length == 0) 10000 else args(1).toInt
 
-    println(table_name + " " + size)
-    get_largest_visited_domains(table_name, size)
+      val table_name = if(args(0).length == 0) "vdomain" else args(0)
+      val size = if(args(1).length == 0) 10000 else args(1).toInt
+
+      println("*********************************************")
+      println(table_name + " " + size)
+      println("*********************************************")
+      
+      get_largest_visited_domains(table_name, size)
   }
 
   /*-------------------------------------------------------------------------------------*/  
