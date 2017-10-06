@@ -50,7 +50,7 @@ object ExportLinks {
 
         val df1 = spark.read
             .cassandraFormat(table_name, "cloud1", "Cassandra Cluster")
-            .load().cache()
+            .load()
         df1.createOrReplaceTempView("table1")
 
         val diseases = Source.fromFile(file_name).getLines.toArray 
