@@ -1,13 +1,8 @@
-/**
- * Written by: Kevin Duraj 
- * Spark 2.0 with Cassandra 3.7 
- */
-
 import org.apache.spark.{SparkContext, SparkConf}
 import com.datastax.spark.connector._
 import org.apache.spark.sql._
 
-object TotalLinksInDallas {
+object TotalLinks {
 
     val locale = new java.util.Locale("us", "US")
      val formatter = java.text.NumberFormat.getIntegerInstance(locale)
@@ -23,11 +18,12 @@ object TotalLinksInDallas {
 
         val rdd = sc.cassandraTable("cloud1", "links")
 
-        println("-----------------------------------------")
-        println("Total Links: " + rdd.count)
+        println("\n************************\n")
+        println("  Total Links = " + rdd.count)
+        println("\n************************\n")
         println(rdd.first)
+
         //println(rdd.map(_.getInt("url")).sum)
-        println("-----------------------------------------")
 
         sc.stop();
 
