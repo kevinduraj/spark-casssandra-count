@@ -32,7 +32,8 @@ object TopDomains {
         val sc = new SparkContext(conf)
         
         val df = sc.cassandraTable("cloud1", table_name)
-        df.printSchema()
+        val total = df.cassandraCount()
+        println(total)
 
         //val df2 = df.select("domain", "total").filter("total > " + size).orderBy("total")
         //df2.collect().foreach { row => println(row.get(0)  + " " + row.get(1) ) }
