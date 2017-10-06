@@ -48,18 +48,18 @@ object Domains {
         val df1 = spark.read
             .cassandraFormat("vdomain", "cloud1", "Cassandra Cluster")
             .load().cache()
+            
+        df1.createOrReplaceTempView("table1")
 
         val diseases = Source.fromFile(file_name).getLines.toArray 
 
         for(disease <- diseases) {
 
             /*--- Read from Cassandra ---*/
-            df1.createOrReplaceTempView("table1")
             val SQL = "SELECT * FROM table1 WHERE domain like '%"+disease+"%'"
             println(SQL)
             val df2 = spark.sql(SQL)
             df2.show(10, false)
-
 
             /*--- Write to Cassandra ---*/
             df2.write
@@ -68,6 +68,15 @@ object Domains {
                 .options(Map("table" -> "health", "keyspace" -> "cloud2"))
                 .save()
         }
+        
+        val df3 = spark.read
+            .cassandraFormat("health", "cloud2", "Cassandra Cluster")
+            .load().cache()
+        
+        df3.createOrReplaceTempView("table2") 
+
+        val df4 = spark.sql("SELECT count(domain) FROM table2")
+        df4.show(false)
 
         spark.stop()
 
