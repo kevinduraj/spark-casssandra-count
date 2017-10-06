@@ -37,13 +37,14 @@ object TopDomains {
         println("Total " +  table_name + " = " + total)
 
         val table2 = table1.spanBy(row => (row.getInt("domain")))
-        val result1 = table2.count()
-        println(result1)
+        table2.take(100).foreach(println)
+
+        //val result1 = table2.count()
+        //println(result1)
 
         //val result = table1.select("domain").groupBy("domain")
         //val df2 = df.select("domain", "total").filter("total > " + size).orderBy("total")
         //df2.collect().foreach { row => println(row.get(0)  + " " + row.get(1) ) }
-
 
         // df2.filter("count > 1000").collect().foreach(println)
         // csc.setKeyspace("engine")
