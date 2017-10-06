@@ -12,7 +12,6 @@ object TotalLinks {
         val conf = new SparkConf(true)
                         .setAppName("TotalLinksInDallas")
                         .set("spark.cassandra.connection.host", "10.0.0.1")
-
         //val sc = new SparkContext("spark://69.13.39.46:7077", "cloud1", conf)
         val sc = new SparkContext(conf)
 
