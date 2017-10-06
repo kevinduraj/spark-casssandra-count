@@ -1,120 +1,13 @@
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.cassandra._
 import org.apache.spark.sql.functions._
+import scala.io.Source
 
-
-case class domain(name: String, count: BigInt)
-
-case class Row(name: String, count: BigInt)
+//case class domain(name: String, count: BigInt)
+//case class Row(name: String, count: BigInt)
 
 /*---------------------------------------------------------------------------------------*/
 object Domains {
-
-        val diseases=Array(
-                "abscess"
-                ,"allergy"
-                ,"anemia"
-                ,"angiomatosis"
-                ,"appendicitis"
-                ,"aspergillosis"
-                ,"autism"
-                ,"bacterial"
-                ,"biochemical"
-                ,"biology"
-                ,"bladder"
-                ,"bone"
-                ,"brain"    
-                ,"bronchitis"
-                ,"cancer"
-                ,"cancer"  
-                ,"carcinoma"
-                ,"cardio"   
-                ,"cervical"
-                ,"chlamydial"
-                ,"choriomeningitis"
-                ,"chromozone"
-                ,"chronic"
-                ,"collagen"
-                ,"congenita"
-                ,"contagious"
-                ,"cortical"
-                ,"deafness"
-                ,"dental"
-                ,"diabetic"
-                ,"disease"  
-                ,"disorder"
-                ,"dissection"
-                ,"drug"
-                ,"emboli"
-                ,"eustachian"
-                ,"fatty"
-                ,"fever"
-                ,"fungal"   
-                ,"gastric"
-                ,"gastrointestinal"
-                ,"genetic"
-                ,"genetics"
-                ,"gerson"  
-                ,"goitre"
-                ,"gout"
-                ,"granulomatosis"
-                ,"headache" 
-                ,"health"  
-                ,"heart"    
-                ,"heatstroke"
-                ,"hematologic"
-                ,"hemoglobinopathies"
-                ,"hemorrhagic"
-                ,"hepatitis"
-                ,"hormonal"
-                ,"hutchinson"
-                ,"hyperactivity"
-                ,"hypertension"
-                ,"intestinal"
-                ,"intravascular"
-                ,"kidney"
-                ,"liver"
-                ,"lung"
-                ,"lyme"
-                ,"lymphocytic"
-                ,"lymphomatoid"
-                ,"meningococcal"
-                ,"mental"   
-                ,"metabolic"
-                ,"myofascial"
-                ,"nasal"
-                ,"necrosis"
-                ,"nematodes"
-                ,"osteoporosis"
-                ,"overdose"
-                ,"pain"
-                ,"paraneoplastic"
-                ,"parkinsons"
-                ,"phenomena"
-                ,"prednisone"
-                ,"prostatic"
-                ,"pulmonary"
-                ,"renal"
-                ,"respiratory"
-                ,"schizoaffective"
-                ,"schizophrenia"
-                ,"sickness"
-                ,"skin"
-                ,"sleeping"
-                ,"spinal"
-                ,"surgery"
-                ,"symptoms"
-                ,"syndrome"
-                ,"tissue"
-                ,"treatment"
-                ,"tuberculosis"
-                ,"tumor"
-                ,"vascular"
-                ,"virus"
-                ,"visual"
-                ,"vitamin"
-                ,"vulgaris"
-        )
 
     val locale = new java.util.Locale("us", "US")
     val formatter = java.text.NumberFormat.getIntegerInstance(locale)
@@ -123,13 +16,16 @@ object Domains {
     def main(args: Array[String]) {
 
         val table_name = if (args(0).length == 0) "vdomain" else args(0)
-        val size = if (args(1).length == 0) 10000 else args(1).toInt
+        val file_name  = if (args(1).length == 0) { 
+            Console.err.println("Need filename argument")
+            sys.exit(1) 
+        } else  args(1) 
 
-        println("*********************************************")
-        println(table_name + " " + size)
-        println("*********************************************")
+        println("+---------------------------------------------")
+        println("| " + table_name + " | " + file_name)
+        println("+---------------------------------------------")
 
-        get_largest_visited_domains(table_name, size)
+        get_largest_visited_domains(table_name, file_name)
     }
 
 
@@ -139,7 +35,8 @@ object Domains {
       * @param table_name
       * @param size
       */
-    def get_largest_visited_domains(table_name: String, size: Int): Unit = {
+    def get_largest_visited_domains(table_name: String, file_name: String): Unit = {
+
 
         val spark = SparkSession
             .builder()
@@ -152,6 +49,7 @@ object Domains {
             .cassandraFormat("vdomain", "cloud1", "Cassandra Cluster")
             .load().cache()
 
+        val diseases = Source.fromFile(file_name).getLines.toArray 
 
         for(disease <- diseases) {
 
