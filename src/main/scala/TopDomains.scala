@@ -46,8 +46,11 @@ object TopDomains {
             .load()
 
         val df2 = df1.orderBy(col("total").desc)
-        df2.show(100, false)
+        df2.show(50, false)
         println("Total vdomain = " + df2.count())
+
+        val df3 = spark.sql("SELECT * FROM vdomain WHERE total < 10")
+        df3.show(50, false)
 
         // Write to Cassandra
         //      employee1.write
@@ -56,7 +59,7 @@ object TopDomains {
         //          .options(Map( "table" -> "employee_new", "keyspace" -> "test_keyspace"))
         //          .save()
 
-        
+
         //val result = table1.select("domain").groupBy("domain")
         //val df2 = df.select("domain", "total").filter("total > " + size).orderBy("total")
         //df2.collect().foreach { row => println(row.get(0)  + " " + row.get(1) ) }
