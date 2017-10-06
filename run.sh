@@ -1,10 +1,6 @@
 #!/bin/bash
 #-------------------------------------------------------------------#
-if [ "$1" == "0" ]; then
-    sbt clean package
-
-#-------------------------------------------------------------------#
-elif [ "$1" == "1" ]; then
+if [ "$1" == "1" ]; then
 spark-submit    \
   --class "Domains"         \
   --master local[16]        \
@@ -25,11 +21,8 @@ spark-submit    \
 else
 
   echo "+---------------------------------------------"
-  echo "| 0. Build Assembly                           "
-  echo "| 1. Domains                                  "
+  echo "| 1. Health Domains                           "
   echo "| 2. Total Links                              "
-  echo "+---------------------------------------------"
-  echo "| 4. Clear                                    "
   echo "+---------------------------------------------"
 
 fi

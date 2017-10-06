@@ -10,6 +10,112 @@ case class Row(name: String, count: BigInt)
 /*---------------------------------------------------------------------------------------*/
 object Domains {
 
+        val diseases=Array(
+                "abscess"
+                ,"allergy"
+                ,"anemia"
+                ,"angiomatosis"
+                ,"appendicitis"
+                ,"aspergillosis"
+                ,"autism"
+                ,"bacterial"
+                ,"biochemical"
+                ,"biology"
+                ,"bladder"
+                ,"bone"
+                ,"brain"    
+                ,"bronchitis"
+                ,"cancer"
+                ,"cancer"  
+                ,"carcinoma"
+                ,"cardio"   
+                ,"cervical"
+                ,"chlamydial"
+                ,"choriomeningitis"
+                ,"chromozone"
+                ,"chronic"
+                ,"collagen"
+                ,"congenita"
+                ,"contagious"
+                ,"cortical"
+                ,"deafness"
+                ,"dental"
+                ,"diabetic"
+                ,"disease"  
+                ,"disorder"
+                ,"dissection"
+                ,"drug"
+                ,"emboli"
+                ,"eustachian"
+                ,"fatty"
+                ,"fever"
+                ,"fungal"   
+                ,"gastric"
+                ,"gastrointestinal"
+                ,"genetic"
+                ,"genetics"
+                ,"gerson"  
+                ,"goitre"
+                ,"gout"
+                ,"granulomatosis"
+                ,"headache" 
+                ,"health"  
+                ,"heart"    
+                ,"heatstroke"
+                ,"hematologic"
+                ,"hemoglobinopathies"
+                ,"hemorrhagic"
+                ,"hepatitis"
+                ,"hormonal"
+                ,"hutchinson"
+                ,"hyperactivity"
+                ,"hypertension"
+                ,"intestinal"
+                ,"intravascular"
+                ,"kidney"
+                ,"liver"
+                ,"lung"
+                ,"lyme"
+                ,"lymphocytic"
+                ,"lymphomatoid"
+                ,"meningococcal"
+                ,"mental"   
+                ,"metabolic"
+                ,"myofascial"
+                ,"nasal"
+                ,"necrosis"
+                ,"nematodes"
+                ,"osteoporosis"
+                ,"overdose"
+                ,"pain"
+                ,"paraneoplastic"
+                ,"parkinsons"
+                ,"phenomena"
+                ,"prednisone"
+                ,"prostatic"
+                ,"pulmonary"
+                ,"renal"
+                ,"respiratory"
+                ,"schizoaffective"
+                ,"schizophrenia"
+                ,"sickness"
+                ,"skin"
+                ,"sleeping"
+                ,"spinal"
+                ,"surgery"
+                ,"symptoms"
+                ,"syndrome"
+                ,"tissue"
+                ,"treatment"
+                ,"tuberculosis"
+                ,"tumor"
+                ,"vascular"
+                ,"virus"
+                ,"visual"
+                ,"vitamin"
+                ,"vulgaris"
+        )
+
     val locale = new java.util.Locale("us", "US")
     val formatter = java.text.NumberFormat.getIntegerInstance(locale)
 
@@ -41,33 +147,37 @@ object Domains {
             .config("spark.cassandra.connection.host", "10.0.0.1")
             .getOrCreate()
 
+
         val df1 = spark.read
             .cassandraFormat("vdomain", "cloud1", "Cassandra Cluster")
             .load().cache()
 
-        df1.createOrReplaceTempView("table1")
-        val df3 = spark.sql("SELECT * FROM table1 WHERE domain like '%health%'")
-        df3.show(100, false)
+
+        for(disease <- diseases) {
+
+            //--- Read from Cassandra
+            df1.createOrReplaceTempView("table1")
+            val SQL = "SELECT * FROM table1 WHERE domain like '%"+disease+"%'"
+            println(SQL)
+            val df2 = spark.sql(SQL)
+            df2.show(10, false)
 
 
-        //  val df2 = df1.orderBy(col("total").desc)
-        //  df2.show(50, false)
-        //  println("Total vdomain = " + df2.count())
-
-
-        // Write to Cassandra
-        //  .mode("overwrite")
-        df3.write
-            .format("org.apache.spark.sql.cassandra")
-            .mode("append")
-            .options(Map("table" -> "health", "keyspace" -> "cloud2"))
-            .save()
-
+            //--- Write to Cassandra
+            df2.write
+                .format("org.apache.spark.sql.cassandra")
+                .mode("append") //.mode("overwrite")
+                .options(Map("table" -> "health", "keyspace" -> "cloud2"))
+                .save()
+        }
 
         spark.stop()
 
     }
 
-    /*---------------------------------------------------------------------------------------*/
-
 }
+/*-------------------------------------------------------------------------------------------*/
+//  val df2 = df1.orderBy(col("total").desc)
+//  df2.show(50, false)
+//  println("Total vdomain = " + df2.count())
+/*-------------------------------------------------------------------------------------------*/
