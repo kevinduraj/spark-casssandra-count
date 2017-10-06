@@ -29,31 +29,45 @@ object TopDomains {
 
   /*-------------------------------------------------------------------------------------*/  
   def get_largest_visited_domains(table_name: String, size: Int): Unit = {
-        
-//        val conf = new SparkConf(true)
-//                        .setAppName("TopDomains")
-//                        .set("spark.cassandra.connection.host", "10.0.0.1")
-//        //val sc = new SparkContext("spark://69.13.39.46:7077", "cloud1", conf)
-//        val spark = new SparkContext(conf)
-//
-//        val table1 = spark.cassandraTable("cloud1", table_name)
-//        val total = table1.cassandraCount()
-//        println("Total " +  table_name + " = " + total)
-//
-//        val table2 = table1.spanBy(row => (row.getString("domain")))
-//        table2.take(100).foreach(println)
-
 
       val spark = SparkSession
           .builder()
           .appName("TopDomains")
           .config("spark.cassandra.connection.host", "10.0.0.1")
-          .config("spark.cassandra.connection.port", "9042")
-          .master("local[2]")
           .getOrCreate()
 
-      val table1 = spark.sql("select * from cloud1.vdomain")
-      table1.show(100, true)
+      import spark.implicits._
+
+      val table1 = spark.sql("SELECT * FROM cloud1.vdomain")
+      table1.show(100, false)
+
+//        val conf = new SparkConf(true)
+//                        .setAppName("TopDomains")
+//                        .set("spark.cassandra.connection.host", "10.0.0.1")
+//        //val sc = new SparkContext("spark://69.13.39.34:7077", "cloud1", conf)
+//        val spark = new SparkContext(conf)
+//        import spark.implicits._
+//
+//        val table1 = spark.cassandraTable("cloud1", table_name)
+//        val total = table1.cassandraCount()
+//        println("Total " +  table_name + " = " + total)
+
+
+        //val table2 = table1.spanBy(row => (row.getString("domain")))
+        //table2.take(100).foreach(println)
+
+
+
+//      val spark = SparkSession
+//          .builder()
+//          .appName("TopDomains")
+//          .config("spark.cassandra.connection.host", "10.0.0.1")
+//          .config("spark.cassandra.connection.port", "9042")
+//          .master("local[2]")
+//          .getOrCreate()
+//
+//      val table1 = spark.sql("select * from cloud1.vdomain")
+//      table1.show(100, true)
 
 
 
