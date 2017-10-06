@@ -21,9 +21,9 @@ object Domains {
             sys.exit(1) 
         } else  args(1) 
 
-        println("+---------------------------------------------")
+        println("+----------------------------------------------------------")
         println("| " + table_name + " | " + file_name)
-        println("+---------------------------------------------")
+        println("+----------------------------------------------------------")
 
         get_largest_visited_domains(table_name, file_name)
     }
@@ -53,7 +53,7 @@ object Domains {
 
         for(disease <- diseases) {
 
-            //--- Read from Cassandra
+            /*--- Read from Cassandra ---*/
             df1.createOrReplaceTempView("table1")
             val SQL = "SELECT * FROM table1 WHERE domain like '%"+disease+"%'"
             println(SQL)
@@ -61,7 +61,7 @@ object Domains {
             df2.show(10, false)
 
 
-            //--- Write to Cassandra
+            /*--- Write to Cassandra ---*/
             df2.write
                 .format("org.apache.spark.sql.cassandra")
                 .mode("append") //.mode("overwrite")
