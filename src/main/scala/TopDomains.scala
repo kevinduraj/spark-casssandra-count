@@ -36,7 +36,7 @@ object TopDomains {
         val total = table1.cassandraCount()
         println("Total " +  table_name + " = " + total)
 
-        val table2 = table1.spanBy(row => (row.getInt("domain")))
+        val table2 = table1.spanBy(row => (row.getString("domain")))
         table2.take(100).foreach(println)
 
         //val result1 = table2.count()
