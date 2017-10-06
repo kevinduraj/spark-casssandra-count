@@ -27,6 +27,15 @@ spark-submit    \
   target/scala-2.11/spark-cassandra-count_2.11-1.0.jar \
   /root/spark-cassandra-count/data/diseases.dat 
 
+elif [ "$1" == "4" ]; then
+spark-submit    \
+  --class "ExportLinks"     \
+  --master local[16]        \
+  --driver-memory   32G     \
+  --executor-memory 32G     \
+  target/scala-2.11/spark-cassandra-count_2.11-1.0.jar links \
+  /root/spark-cassandra-count/data/diseases.dat 
+
 #-------------------------------------------------------------------#
 else
 
