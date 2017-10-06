@@ -1,8 +1,5 @@
 import com.datastax.spark.connector._
-import org.apache.spark._
 import org.apache.spark.{SparkContext, SparkConf}
-import org.apache.spark.sql._
-import org.apache.spark.sql.hive.HiveContext
 
 case class domain(name: String, count: BigInt)
 case class Row(name:String, count:BigInt)
@@ -29,11 +26,11 @@ object TopDomains {
                         .setAppName("TopDomains")
                         .set("spark.cassandra.connection.host", "10.0.0.1")
         //val sc = new SparkContext("spark://69.13.39.46:7077", "cloud1", conf)
-        val sc = new SparkContext(conf)
+        val spark = new SparkContext(conf)
         
-        val df = sc.cassandraTable("cloud1", table_name)
+        val df = spark.cassandraTable("cloud1", table_name)
         val total = df.cassandraCount()
-        println(total)
+        println("Total " +  table_name + " = " + total)
 
         //val df2 = df.select("domain", "total").filter("total > " + size).orderBy("total")
         //df2.collect().foreach { row => println(row.get(0)  + " " + row.get(1) ) }
@@ -47,6 +44,8 @@ object TopDomains {
         //println("--------------------------------------------------------------")
         //df2.collect().foreach { row => println(row.get(0)  + " " + row.get(1) ) }
         //println("--------------------------------------------------------------")
+
+        spark.stop()
 
   }
   /*---------------------------------------------------------------------------------------*/  
