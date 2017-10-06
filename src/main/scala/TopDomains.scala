@@ -49,9 +49,11 @@ object TopDomains {
         df2.show(50, false)
         println("Total vdomain = " + df2.count())
 
-        val df3 = spark.sql("SELECT * FROM vdomain WHERE total < 10")
+        df2.createOrReplaceTempView("domains")
+        val df3 = spark.sql("SELECT * FROM domains WHERE total < 10")
         df3.show(50, false)
 
+        
         // Write to Cassandra
         //      employee1.write
         //          .format("org.apache.spark.sql.cassandra")
